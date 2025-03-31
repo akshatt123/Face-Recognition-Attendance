@@ -34,7 +34,7 @@ conda-meta/
 pkgs/
 
 # Ignore sensitive Kubernetes secrets
-deployment/db-secret.yaml
+deployment/db-secret-2022bcd0033.yaml
 deployment/Dockerfile
 
 # Ignore backend configuration files with secrets
