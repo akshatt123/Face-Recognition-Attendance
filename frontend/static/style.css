@@ -1,0 +1,41 @@
+body { 
+    text-align: center; 
+    font-family: Arial, sans-serif; 
+    background-color: #f4f4f4; 
+}
+h1 { 
+    color: #333; 
+}
+#video-feed { 
+    width: 640px; 
+    height: 480px; 
+    border: 2px solid black; 
+    display: none; 
+    margin-top: 10px;
+}
+#start-camera, #stop-camera { 
+    padding: 10px 20px; 
+    margin: 10px; 
+    cursor: pointer; 
+    font-size: 16px; 
+    border: none;
+    border-radius: 5px;
+}
+#start-camera { 
+    background-color: green; 
+    color: white; 
+}
+#stop-camera { 
+    background-color: red; 
+    color: white; 
+}
+#stop-camera:disabled { 
+    background-color: gray; 
+}
+#attendance-message { 
+    margin-top: 15px; 
+    font-size: 18px; 
+    font-weight: bold; 
+    color: blue; 
+}
+

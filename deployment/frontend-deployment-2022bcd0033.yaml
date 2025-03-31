@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deploy-2022bcd0033
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: face_recognition_attendance-frontend
+        imagePullPolicy: Never  # Prevent pulling from Docker Hub
+        ports:
+        - containerPort: 80

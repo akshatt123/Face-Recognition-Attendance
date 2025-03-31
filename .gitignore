@@ -1,0 +1,42 @@
+# Ignore Python bytecode and virtual environments
+__pycache__/
+*.pyc
+*.pyo
+venv/
+env/
+
+# Ignore logs and temporary files
+*.log
+*.csv
+*.sqlite
+*.db
+
+# Ignore Face Recognition Training Images
+backend/Training_images/
+
+# Ignore Node modules (if frontend uses npm)
+frontend/node_modules/
+
+# Ignore Docker build caches
+.dockerignore
+docker-compose.override.yml
+
+# Ignore Kubernetes temporary files
+deployment/*.bak
+
+# Ignore IDE and OS files
+.DS_Store
+.vscode/
+.idea/
+
+# Ignore Conda temporary files
+conda-meta/
+pkgs/
+
+# Ignore sensitive Kubernetes secrets
+deployment/db-secret.yaml
+deployment/Dockerfile
+
+# Ignore backend configuration files with secrets
+backend/config.py
+

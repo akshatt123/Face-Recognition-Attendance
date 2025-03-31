@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deploy-2022bcd0033
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: db-config-2022bcd0033
+            - secretRef:
+                name: db-secret-2022bcd0033
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-storage
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: db-pvc

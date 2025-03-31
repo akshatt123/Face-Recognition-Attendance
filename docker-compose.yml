@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  backend:
+    build: 
+      context: ./backend  
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app  # Map host backend dir to container /app
+      - /app/face_recognition_models  # Exclude large files
+    environment:
+      - FLASK_ENV=development
+      - DATABASE_URL=postgresql://admin:password@db:5432/attendance1_db
+    depends_on:
+      - db
+    restart: unless-stopped
+    
+  frontend:
+    build: 
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: attendance1_db
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:
+
+
+
+
+
+
+
+

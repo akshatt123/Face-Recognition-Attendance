@@ -1,0 +1,16 @@
+name: face_recog_env
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - dlib=19.24
+  - numpy=1.24
+  - opencv=4.7
+  - flask=2.2
+  - flask-sqlalchemy=3.0
+  - werkzeug=2.2.3
+  - psycopg2=2.9
+  - face-recognition
+  - pip=23.1
+  - pip:
+    - flask-cors>=3.0
