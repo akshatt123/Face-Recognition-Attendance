@@ -19,7 +19,7 @@ spec:
             - containerPort: 5432
           envFrom:
             - configMapRef:
-                name: db-config-2022bcd0033
+                name: db-configmap-2022bcd0033
             - secretRef:
                 name: db-secret-2022bcd0033
           volumeMounts:

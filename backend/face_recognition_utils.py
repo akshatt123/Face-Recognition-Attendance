@@ -104,7 +104,7 @@ def load_known_faces(folder='face_encodings'):
 #         now = datetime.now().strftime('%H:%M:%S')
 #         with open(filename, 'a') as f:
 #             f.write(f'{SESSION_ID},{name},{now}\n')
-#         print(f"✅ Marked attendance for {name} at {now}.")
+#         print(f" Marked attendance for {name} at {now}.")
 
 #     recorded_attendance.add(name)
 #     new_entry = Attendance(name=name, timestamp=datetime.now())
@@ -148,9 +148,9 @@ def mark_attendance(name, filename='attendance.csv'):
     with open(SESSION_FILE, "r") as f:
         recorded_attendance = set(f.read().splitlines())
 
-    # Check if attendance already recorded in this session
+   # Check if attendance already recorded in this session
     if name in recorded_attendance:
-        latest_attendance_message = f"⏳ Attendance for {name} already recorded in this session."
+        latest_attendance_message = f" Attendance for {name} already recorded in this session."
         print(latest_attendance_message) 
         return  
 

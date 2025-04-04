@@ -1,4 +1,4 @@
-name: face_recog_env
+name: face_env
 channels:
   - conda-forge
   # - defaults
@@ -16,17 +16,3 @@ dependencies:
   - pip:
     - flask-cors>=3.0
 
-# name: face_recog_env
-# channels:
-#   - conda-forge
-# dependencies:
-#   - python=3.9
-#   - dlib=19.24
-#   - numpy=1.24
-#   - opencv=4.7
-#   - flask=2.2
-#   - flask-sqlalchemy=3.0
-#   - psycopg2=2.9
-#   - pip=23.1
-#   - pip:
-#     - flask-cors>=3.0

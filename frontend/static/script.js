@@ -1,69 +1,3 @@
-// document.getElementById("start-camera").addEventListener("click", function() {
-//     fetch("/start_camera")
-//         .then(response => response.json())
-//         .then(data => {
-//             console.log(data.message);
-//             document.getElementById("video-feed").src = "/video_feed";
-//             document.getElementById("video-feed").style.display = "block";
-//             document.getElementById("stop-camera").disabled = false;
-//             this.disabled = true;
-//             fetchAttendance(); // ✅ Fetch attendance immediately after starting the camera
-//         })
-//         .catch(error => console.error("Error starting camera:", error));
-// });
-
-// document.getElementById("stop-camera").addEventListener("click", function() {
-//     fetch("/stop_camera")
-//         .then(response => response.json())
-//         .then(data => {
-//             console.log(data.message);
-//             document.getElementById("video-feed").src = "";
-//             document.getElementById("video-feed").style.display = "none";
-//             document.getElementById("start-camera").disabled = false;
-//             this.disabled = true;
-//             showMessage("Camera stopped.", "red");
-//         })
-//         .catch(error => console.error("Error stopping camera:", error));
-// });
-
-// function fetchAttendance() {
-//     fetch('/attendance_records')
-//         .then(response => response.json())
-//         .then(data => {
-//             console.log("Fetched Attendance Data:", data);
-//             if (data.length > 0) {
-//                 let latestEntry = data[0];
-//                 showMessage(`✔ Attendance recorded for <b>${latestEntry.name}</b> at ${latestEntry.timestamp}`, "green");
-//             } else {
-//                 showMessage("No attendance recorded yet.", "gray");
-//             }
-//         })
-//         .catch(error => console.error("Error fetching attendance:", error));
-// }
-
-// // Show message and auto-hide after 5 seconds
-// function showMessage(message, color) {
-//     let msgBox = document.getElementById("attendance-message");
-//     msgBox.innerHTML = message;
-//     msgBox.style.color = color;
-//     msgBox.style.display = "block";
-
-//     setTimeout(() => {
-//         msgBox.style.display = "none";
-//     }, 5000);
-// }
-
-
-// setInterval(fetchAttendance, 3000);
-
-
-
-
-
-
-
-
-
 let lastFrameTime = Date.now();
 let checkingAttendance = false; // Avoid multiple API calls
 
@@ -96,39 +30,58 @@ document.getElementById("stop-camera").addEventListener("click", function() {
         .catch(error => console.error("Error stopping camera:", error));
 });
 
+
+
 // Function to monitor camera frame updates
 function monitorFrameUpdates() {
     setInterval(() => {
         let currentTime = Date.now();
-        
-        if (document.getElementById("video-feed").src && (currentTime - lastFrameTime > 1000)) {
-            if (!checkingAttendance) {
-                checkingAttendance = true;
-                console.log("Camera frozen detected! Fetching attendance...");
-                fetchAttendance();
+        let videoFeed = document.getElementById("video-feed");
+
+        if (videoFeed && videoFeed.src) {
+            if (currentTime - lastFrameTime > 1000) {  // If the frame hasn't updated in over 1s
+                if (!checkingAttendance) {
+                    checkingAttendance = true;
+                    console.log("⚠ Camera frozen detected! Fetching latest attendance...");
+                    fetchAttendance();
+                }
+            } else {
+                checkingAttendance = false;  // Reset flag when frames are updating normally
             }
-        } else {
-            checkingAttendance = false;
         }
     }, 1000);
 }
 
-// Fetch the latest attendance record
-function fetchAttendance() {
+// Function to fetch the latest attendance record
+function fetchAttendance() { 
     fetch('/latest_attendance_message')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
         .then(data => {
-            console.log("Fetched Attendance:", data);
-            if (data.name) {
-                showMessage(`✔ Attendance recorded for <b>${data.name}</b> at ${data.timestamp}`, "green");
-                document.getElementById("attendance-message").innerHTML = "`✔ Attendance recorded for <b>${data.name}</b> at ${data.timestamp}";
+            console.log("📢 Fetched Attendance:", data);
+
+            let messageElement = document.getElementById("attendance-message");
+
+            if (data.name && data.timestamp) {
+                let attendanceMessage = `✔ Attendance recorded for <b>${data.name}</b> at ${data.timestamp}`;
+                showMessage(attendanceMessage, "green");
+                messageElement.innerHTML = attendanceMessage;
             } else {
-                showMessage("No attendance recorded yet.", "gray");
+                let noAttendanceMessage = "ℹ No attendance recorded yet.";
+                showMessage(noAttendanceMessage, "gray");
+                messageElement.innerHTML = noAttendanceMessage;
             }
         })
-        .catch(error => console.error("Error fetching attendance:", error));
-        
-    }
+        .catch(error => {
+            console.error("❌ Error fetching attendance:", error);
+            showMessage("⚠ Failed to fetch attendance. Please try again.", "red");
+        });
+}
+
 
 // Listen for attendance updates using polling
 function listenForAttendanceUpdate() {

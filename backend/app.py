@@ -33,7 +33,7 @@ def video_feed():
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
-latest_attendance_message = ""  # Global variable to store the latest message
+latest_attendance_message = {"name": None, "timestamp": None}  # Global variable to store the latest message
 
 @app.route('/start_camera', methods=['GET'])
 def start_camera():
@@ -74,7 +74,9 @@ recorded_names = set()
 session_lock = Lock()
 
 
-
+@app.route('/health')
+def health():
+    return jsonify({"status": "ok"}), 200
 
 if __name__ == '__main__':
     with app.app_context():

@@ -1,68 +1,35 @@
+# Use Mambaforge base image
 FROM condaforge/mambaforge:latest
-
+    
 WORKDIR /app
 
+# Set timezone non-interactively
+ENV DEBIAN_FRONTEND=noninteractive
+RUN ln -fs /usr/share/zoneinfo/Asia/Kolkata /etc/localtime && \
+    echo "Asia/Kolkata" > /etc/timezone
+
 # Install system dependencies
-RUN apt-get update -y && \
-    apt-get install -y --no-install-recommends \
-    libgl1-mesa-glx \
-    libglib2.0-0 \
+RUN apt-get update && apt-get install -y libgl1-mesa-glx \
+    libgtk2.0-0 \
     libsm6 \
     libxext6 \
-    libxrender1 \
+    libgl1-mesa-glx \
     && rm -rf /var/lib/apt/lists/*
 
-
 # Copy environment file
-COPY environment.yml .
+COPY environment.yml /app/environment.yml
 
-# Create conda environment
-RUN mamba env create -f environment.yml
+# Create Conda environment
+RUN mamba env create -f /app/environment.yml
 
-# Copy application code 
-COPY . .
+# Set the default shell to ensure the environment is activated when needed
+SHELL ["/bin/bash", "-c"]
 
-# Set environment
-ENV PATH="/opt/conda/envs/face_recog_env/bin:${PATH}"
+# Copy entire project
+COPY . /app
 
+# Expose port 5000 for Flask
 EXPOSE 5000
-CMD ["python", "app.py"]   
 
-
-
-# FROM condaforge/mambaforge:latest
-
-# WORKDIR /app
-
-# # Install system dependencies
-# RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-#     libgtk2.0-0 \
-#     libsm6 \
-#     libxext6 \
-#     && rm -rf /var/lib/apt/lists/*
-
-# # Copy environment.yml from backend folder
-# COPY environment.yml /app/environment.yml
-
-# # Create environment with Mamba
-# RUN mamba env create -f /app/environment.yml
-
-# # Set environment path
-# ENV PATH /opt/conda/envs/face_recog_env/bin:$PATH
-
-# # Copy all backend files correctly
-# COPY backend /app
-
-# # Ensure correct working directory
-# WORKDIR /app
-
-# EXPOSE 5000
-
-# # Run Flask app
-# CMD ["python", "backend/app.py"]
-
-
-
-
-
- 
+# Run the Flask application using face_env
+CMD ["bash", "-c", "conda run --no-capture-output -n face_env python app.py"]

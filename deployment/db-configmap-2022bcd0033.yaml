@@ -3,6 +3,5 @@ kind: ConfigMap
 metadata:
   name: db-configmap-2022bcd0033
 data:
-  POSTGRES_DB: "attendance1_db"
-  POSTGRES_HOST: "postgres-service"
-  POSTGRES_PORT: "5432"
+  DATABASE_URL: "postgresql://username:password@db-service:5432/dbname"
+
